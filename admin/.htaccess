@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Service-Bereich"
+AuthUserFile C:\xampp\htdocs\kmcms\admin\.htusers
+require user  Client
