@@ -5,38 +5,41 @@ function getCurr(){
   if ( isset($_GET['id']) ) {
     $current = $_GET['id'];
   } else {
-    header('Location: index.php?id=startseite');
+    header('Location: index.php?id=home');
   }
   return $current;
 }
 
 /* DRAW NAVIGATION */
-function drawNavi(){
+function drawNavi($path){
   $current = getCurr();
   echo('<ul>');
-  foreach(scandir("./pages/") as $page) {
+  $avail = scandir($path."/pages/");
+  include($path."/functions/navi.php");
+  foreach($navi as $page) {
     if($page!='.' and $page!='..'){
-      $file = $page;
-	  $id = explode('.',$page)[0];
+      $file = $page[0];
+	  $id = explode('.',$page[0])[0];
+	  $show = $page[1];
 	  if($current==$id){
-	    echo('<li><b><a href="index.php?id='.$id.'">'.$id.'</a></b></li>');
+	    echo('<li class="current"><a href="index.php?id='.$id.'">'.$show.'</a></li>');
 		continue;
 	  }
-      echo('<li><a href="index.php?id='.$id.'">'.$id.'</a></li>');
+      echo('<li><a href="index.php?id='.$id.'">'.$show.'</a></li>');
 	}
   }
   echo('</ul><div id="push"></div>');
 }
 
 /* DRAW CONTENT */
-function drawCont(){
+function drawCont($path){
   $current = getCurr();
-  if (file_exists("./pages/".$current.".html")){
-    include("./pages/".$current.".html");
+  if (file_exists($path."/pages/".$current.".html")){
+    include($path."/pages/".$current.".html");
   } elseif (file_exists("./pages/".$current.".php")){
-    include("./pages/".$current.".php");
+    include($path."/pages/".$current.".php");
   } else {
-    include("./errors/error.html");
+    include($path."/errors/error.html");
   }
 }
 ?>
